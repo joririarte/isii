@@ -1,0 +1,332 @@
+@startuml
+!pragma layout smetana
+left to right direction
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package "Administración de Usuarios" {
+  class UsuarioSistema {
+    +nombre: String
+    +fechaCreacion: DateTime
+    +email: String
+    +password: String
+    +fechaBaja: Date
+    +motivoBaja: String
+    +activo: Boolean
+    +roles: List<Rol>
+  }
+
+  class Rol {
+    +nombre: String
+    +descripcion: String
+    +modulos: List<ModuloSistema>
+  }
+
+  class ModuloSistema {
+    
+    +codigo: String
+    +nombre: String
+    +descripcion: String
+  }
+
+  UsuarioSistema "0..*" --> "1..*" Rol
+  Rol "1..*" --> "1..*" ModuloSistema
+
+  note right of ModuloSistema
+    No está especificado qué campos tiene cada módulo
+  end note
+}
+
+package "Administración de Sucursales y Rubros" {
+  class Organizacion {
+    +cuit: String
+    +codigo: String
+    +nombre: String
+    +logo: String
+    +rubros: List<Rubro>
+    +servicios: List<Servicio>
+  }
+
+    note right of Organizacion
+    La organización es abstracta?
+  end note
+
+  class Sucursal {
+    +nombre: String
+    +codigo: String
+    +encargado: UsuarioSistema
+    +direccion: Direccion
+  }
+  note right of Sucursal
+    La sucursal el fisica?
+  end note
+
+  class Direccion {
+    +calle: String
+    +numero: String
+    +barrio: String
+    +localidad: String
+    +provincia: String
+  }
+
+  class Rubro {
+    +codigo: String
+    +nombre: String
+    +descripcion: String
+  }
+
+  class Servicio {
+    +codigo: String
+    +nombre: String
+    +descripcion: String
+    +solicitudesCredito: List<SolicitudCredito>
+  }
+
+  Organizacion "1" o-- "1..*" Sucursal
+  Organizacion "1..*" --> "1..*" Rubro
+  Organizacion "1..*" --> "0..*" Servicio
+  Sucursal "1" o-- "1" Direccion
+  Sucursal "1" --> "1" UsuarioSistema : encargado
+}
+
+package "Catalogo" {
+  class CategoriaProducto {
+    +codigo: String
+    +nombre: String
+    +descripcion: String
+  }
+
+  class Proveedor {
+    
+    +nombre: String
+    +cuit: String
+  }
+
+  class UnidadMedida {
+    +codigo: String
+    +nombre: String
+  }
+
+  class AlicuotaIVA {
+    
+    +codigo: String
+    +porcentaje: Decimal
+    +vigenciaDesde: Date
+    +vigenciaHasta: Date
+    +activa: Boolean
+  }
+
+  class Producto {
+    
+    +codigo: String
+    +nombre: String
+    +marca: String
+    +modelo: String
+    +precioBase: Decimal
+    +activo: Boolean
+  }
+
+  Producto "*" --> "1" CategoriaProducto
+  Producto "*" --> "1" Proveedor
+  Producto "*" --> "1" UnidadMedida
+  Producto "*" --> "1" AlicuotaIVA : alicuotaVigente
+}
+
+package "Clientes y Creditos" {
+  class Cliente {
+    +cuil: String
+    +email: String
+    +nombre: String
+    +apellido: String
+    +posicionFiscal: PosicionFiscal
+    +telefono: String
+    +telefonoVerificado: Boolean
+    +fechaCreacion: DateTime
+    +fechaBaja: Date
+    +motivoBaja: String
+    +descripcion: String
+    +fechaNacimiento: Date
+    +domicilioLegal: String
+    +domicilioReal: String
+    +dni: String
+  }
+
+  class LineaCredito {
+    +nombre: String
+    +codigo: String
+    +fechaDesde: Date
+    +fechaHasta: Date
+    +edadMinima: Integer
+    +edadMaxima: Integer
+  }
+
+  class SolicitudCredito {
+    +estado: IEstadoCredito
+    +montoSolicitado: Decimal
+    +montoAprobado: Decimal
+    +fechaSolicitud: DateTime
+    +lineaCredito: LineaCredito
+    +vendedor: UsuarioSistema
+    +ValidarCredito(): Boolean
+  }
+
+  interface IEstadoCredito {}
+  'Patron state para los estados de la solicitud de crédito
+
+  class Pendiente implements IEstadoCredito {}
+
+  class Aprobado implements IEstadoCredito {}
+  
+  class Rechazado implements IEstadoCredito {}
+
+  class ContratoCredito {
+    
+    +numero: String
+    +fechaEmision: DateTime
+    +vigente: Boolean
+  }
+
+  enum PosicionFiscal {
+    RESPONSABLE_INSCRIPTO
+    MONOTRIBUTISTA
+    CONSUMIDOR_FINAL
+    EXENTO
+    OTRO
+  }
+
+  Cliente "1" <-- "0..*" SolicitudCredito
+  UsuarioSistema "1" <-- "0..*" SolicitudCredito : vendedor
+  LineaCredito "1" <-- "0..*" SolicitudCredito
+  SolicitudCredito "0..1" o-- "1" ContratoCredito
+  Servicio "0..*" --> "0..*" SolicitudCredito
+  SolicitudCredito "1" *-- "1" IEstadoCredito : estado
+}
+
+package "Ventas" {
+  class Venta {
+    
+    +numero: String
+    +fechaHora: DateTime
+    +tipoFacturaSolicitada: TipoFactura
+    +totalNeto: Decimal
+    +totalIVA: Decimal
+    +totalFinal: Decimal
+  }
+
+  class ItemVenta {
+    
+    +cantidad: Decimal
+    +precioBaseUnitario: Decimal
+    +descuentoProrrateado: Decimal
+    +alicuotaAplicada: Decimal
+    +importeIVA: Decimal
+    +importeTotal: Decimal
+  }
+
+  class Combo {
+    
+    +codigo: String
+    +nombre: String
+    +descripcion: String
+    +descuentoPorcentaje: Decimal
+  }
+
+  class ComboItem {
+    +cantidad: Decimal
+    +pesoProrrateo: Decimal
+  }
+
+  class MedioPago {
+    +codigo: String
+    +nombre: String
+  }
+
+  class Pago {
+    
+    +importe: Decimal
+    +fechaHora: DateTime
+    +referencia: String
+  }
+
+  Venta "1" o-- "1..*" ItemVenta
+  ItemVenta "*" --> "1" Producto
+  ItemVenta "0..1" --> "1" Combo
+  Combo "1" o-- "1..*" ComboItem
+  ComboItem "*" --> "1" Producto
+
+  Venta "1" o-- "1..*" Pago
+  Pago "*" --> "1" MedioPago
+  Venta "*" --> "1" Cliente
+  Venta "*" --> "1" UsuarioSistema : cajero
+  Venta "*" --> "1" Sucursal
+
+  note right of ItemVenta
+    El descuento de combos se prorratea antes del IVA.
+    El IVA aplicado y el importe de IVA se almacenan por ítem
+    para preservar el historial aunque cambie la alícuota futura.
+  end note
+}
+
+package "Facturacion" {
+  abstract class ComprobanteFiscal {
+    
+    +numero: String
+    +fechaEmision: DateTime
+    +tipoFactura: TipoFactura
+    +totalNeto: Decimal
+    +totalIVA: Decimal
+    +totalFinal: Decimal
+  }
+
+  class Factura {
+  }
+
+  class NotaCredito {
+    +alcance: AlcanceNotaCredito
+    +motivo: String
+  }
+
+  enum TipoFactura {
+    A
+    R
+    B
+  }
+
+  enum AlcanceNotaCredito {
+    COMPLETA
+    PARCIAL
+  }
+
+  Venta "1" --> "0..1" ComprobanteFiscal
+  ComprobanteFiscal <|-- Factura
+  ComprobanteFiscal <|-- NotaCredito
+  NotaCredito "*" --> "1" ComprobanteFiscal : referenciaOriginal
+
+  note right of NotaCredito
+    La nota de crédito debe respetar exactamente
+    la alícuota y el tipo de factura original.
+  end note
+}
+
+package "Stock" {
+  class MovimientoStock {
+    
+    +fechaHora: DateTime
+    +tipo: TipoMovimientoStock
+    +cantidad: Decimal
+    +saldoPosterior: Decimal
+    +observacion: String
+  }
+
+  enum TipoMovimientoStock {
+    INGRESO
+    EGRESO
+    AJUSTE
+    RESERVA
+  }
+
+  Sucursal "1" o-- "0..*" MovimientoStock
+  Producto "1" <-- "0..*" MovimientoStock
+}
+
+@enduml
