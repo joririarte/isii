@@ -907,7 +907,7 @@
 									"parentStyle": true,
 									"left": 483,
 									"top": 479.5,
-									"width": 128.47900390625,
+									"width": 127,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGdebvU3dZmHCQ="
@@ -1333,7 +1333,7 @@
 									"parentStyle": true,
 									"left": 484,
 									"top": 317,
-									"width": 135.0234375,
+									"width": 134,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGdebwB1NaUf2A="
@@ -2348,7 +2348,7 @@
 									"parentStyle": true,
 									"left": 522.5,
 									"top": 255.5,
-									"width": 242.6162109375,
+									"width": 242,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGdfIG+YzYY0iE="
@@ -2558,7 +2558,7 @@
 									"parentStyle": true,
 									"left": 88,
 									"top": 445,
-									"width": 154.47265625,
+									"width": 154,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGdfIJS8jZH2XM="
@@ -6073,7 +6073,7 @@
 									"parentStyle": true,
 									"left": 375,
 									"top": 461,
-									"width": 109.70263671875,
+									"width": 109,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGdfJwP5GyIiDQ="
@@ -6286,7 +6286,7 @@
 									"parentStyle": true,
 									"left": 582.5,
 									"top": 461,
-									"width": 108.24267578125,
+									"width": 108,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGdfJxH2my3+oo="
@@ -8178,7 +8178,7 @@
 									"parentStyle": true,
 									"left": 843.5,
 									"top": 579.5,
-									"width": 171.82080078125,
+									"width": 171,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGdfKeqfIGp8gg="
@@ -8388,7 +8388,7 @@
 									"parentStyle": true,
 									"left": 845,
 									"top": 470,
-									"width": 178.3271484375,
+									"width": 178,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGdfKfQuYHXq4s="
@@ -14187,7 +14187,7 @@
 									"parentStyle": true,
 									"left": 848.5,
 									"top": 387.5,
-									"width": 171.82080078125,
+									"width": 171,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGdfMnF6czDnJI="
@@ -18549,7 +18549,7 @@
 									"parentStyle": true,
 									"left": 851.5,
 									"top": 491.5,
-									"width": 171.82080078125,
+									"width": 171,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGdfOsd0gNNX3w="
@@ -30594,7 +30594,7 @@
 											"top": 1110,
 											"width": 471,
 											"height": 13,
-											"text": "Notas de Credito"
+											"text": "Notas"
 										},
 										{
 											"_type": "LabelView",
@@ -36235,7 +36235,7 @@
 											"top": 8,
 											"width": 135.82080078125,
 											"height": 13,
-											"text": "(from Notas de Credito)"
+											"text": "(from Notas)"
 										},
 										{
 											"_type": "LabelView",
@@ -37312,7 +37312,7 @@
 											"top": -32,
 											"width": 135.82080078125,
 											"height": 13,
-											"text": "(from Notas de Credito)"
+											"text": "(from Notas)"
 										},
 										{
 											"_type": "LabelView",
@@ -39983,7 +39983,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Notas de Credito",
+					"name": "Notas",
 					"ownedElements": [
 						{
 							"_type": "UMLClass",
