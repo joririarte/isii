@@ -30594,7 +30594,7 @@
 											"top": 1110,
 											"width": 471,
 											"height": 13,
-											"text": "Notas"
+											"text": "Notas crediticias"
 										},
 										{
 											"_type": "LabelView",
@@ -36235,7 +36235,7 @@
 											"top": 8,
 											"width": 135.82080078125,
 											"height": 13,
-											"text": "(from Notas)"
+											"text": "(from Notas crediticias)"
 										},
 										{
 											"_type": "LabelView",
@@ -37312,7 +37312,7 @@
 											"top": -32,
 											"width": 135.82080078125,
 											"height": 13,
-											"text": "(from Notas)"
+											"text": "(from Notas crediticias)"
 										},
 										{
 											"_type": "LabelView",
@@ -39983,7 +39983,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Notas",
+					"name": "Notas crediticias",
 					"ownedElements": [
 						{
 							"_type": "UMLClass",
