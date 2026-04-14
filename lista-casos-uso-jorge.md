@@ -2,7 +2,7 @@
 
 ## 1) Administración y seguridad
 
-1. **Autenticación y gestión de usuarios**  
+1. **Autenticar y Gestionar Usuarios**  
    Inicio de sesión, alta/baja/modificación de usuarios con roles y permisos según módulos habilitados.
 
 2. **Configurar organización y sucursales**  
@@ -10,7 +10,7 @@
 
 ## 2) Clientes
 
-3. **Registrar y gestionar clientes**  
+3. **Gestionar clientes**  
    Alta de cliente con validación de teléfono por API externa, modificación, baja lógica y consulta por DNI/CUIT.
 
 ## 3) Productos y stock
@@ -40,10 +40,10 @@
 
 ## 5) Créditos a sola firma
 
-11. **Solicitar y gestionar crédito**  
+11. **Gestionar crédito**  
     Solicitud de crédito, integración con sistema externo para validación, registro de resultado (aprobado/rechazado/pendiente).
 
-12. **Generar contrato y seguimiento**  
+12. **Generar Contrato de Crédito**  
     Emitir contrato de crédito aprobado y permitir consulta de estado de solicitudes.
 
 ## 6) Reportes y análisis
