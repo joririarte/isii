@@ -1,0 +1,484 @@
+﻿ESTIMACIÓN
+
+
+https://softwarecost.org/tools/COCOMO/
+
+================================================================
+TRABAJO PRÁCTICO INTEGRADOR — INGENIERÍA DE SOFTWARE II
+PARTE II — ESTIMACIÓN DEL PROYECTO
+(PRIMERA VERSIÓN BORRADOR — PENDIENTE REVISIÓN )
+================================================================
+
+
+
+
+----------------------------------------------------------------
+d. ESTIMACIÓN
+----------------------------------------------------------------
+
+
+i. MÉTODO ELEGIDO: PUNTOS DE FUNCIÓN (IFPUG)
+================================================================
+
+
+Se utiliza el método de Puntos de Función según el estándar
+IFPUG (International Function Point Users Group), visto en
+clase (ver diapositivas Clase 1 — "Métrica basada en
+funciones").
+
+
+Justificación de la elección:
+- Es el único método de estimación desarrollado con
+  ejercicios resueltos en el material de la cátedra.
+- El propio material indica explícitamente: "los puntos de
+  función pueden calcularse a partir de diagramas de clase
+  UML y diagramas de secuencia", y el proyecto cuenta con
+  diagramas UML completos (archivo diagramas-is-ii.mdj).
+- El sistema tiene funcionalidades bien delimitadas
+  (ABMs, reportes, consultas, APIs externas), lo que
+  permite identificar con claridad los cinco componentes
+  del dominio de información.
+
+
+
+
+================================================================
+PASO 1 — IDENTIFICACIÓN DE COMPONENTES DEL DOMINIO
+================================================================
+
+
+Los componentes se identificaron a partir de los casos de
+uso relevados en los diagramas UML del proyecto.
+
+
+[NOTA: Los siguientes conteos surgen de revisar los UC en
+el archivo diagramas-is-ii.mdj. Verificar con el grupo que
+no falten ni sobren casos de uso, especialmente si se
+agregaron nuevos desde la última versión del diagrama.]
+
+
+
+
+-- ENTRADAS EXTERNAS (EE) --
+Pantallas de carga/modificación/eliminación de datos.
+Incluye operaciones ABM sobre las entidades principales:
+
+
+  1.  Registrar Usuario             (UC-001.1 / UC-001.3)
+  2.  Eliminar Usuario              (UC-001.4)
+  3.  Registrar Organización        (UC-002.1)
+  4.  Modificar Organización        (UC-002.2)
+  5.  Eliminar Organización         (UC-002.3)
+  6.  Registrar Categoría           (UC-004)
+  7.  Modificar Categoría           (UC-004.1)
+  8.  Registrar Producto            (UC-004.3)
+  9.  Modificar Producto            (UC-004.4)
+  10. Eliminar Producto             (UC-004.5)
+  11. Crear Solicitud de Crédito    (UC-011)
+  12. Actualizar Solicitud Crédito  (UC-011.2)
+  13. Registrar Scoring Cliente     (UC-016.1)
+  14. Actualizar Scoring Cliente    (UC-016.2)
+
+
+Total EE = 14
+
+
+[NOTA: Revisar si "Calcular Impuestos y Total" (UC-008)
+debe contarse como EE o como procesamiento interno.
+Por ahora NO se incluyó como EE. A discutir con el grupo.]
+
+
+
+
+-- SALIDAS EXTERNAS (SE) --
+Reportes, notificaciones, documentos generados por el sistema:
+
+
+  1. Emitir Factura                 (UC-009)
+  2. Emitir Nota de Crédito        (UC-010)
+  3. Generar Contrato de Crédito   (UC-012)
+  4. Generar Reporte de Ventas     (UC-013)
+  5. Generar Reporte de Productos  (UC-014)
+
+
+Total SE = 5
+
+
+[NOTA: Si el sistema genera notificaciones por correo u
+otro canal (ej. aviso de aprobación de crédito), sumarlas
+como SE adicionales. Preguntar al grupo si eso está en el
+alcance.]
+
+
+
+
+-- CONSULTAS EXTERNAS (CE) --
+Pantallas de búsqueda/consulta que recuperan datos sin
+modificarlos:
+
+
+  1. Consultar Usuario              (UC-001.5)
+  2. Autenticar Usuario             (UC-001.1) [login]
+  3. Consultar Organización        (UC-002.x implícito)
+  4. Consultar Categoría           (UC-004.2)
+  5. Consultar Producto            (UC-004.6)
+  6. Consultar Solicitud Crédito   (UC-011.1)
+  7. Consultar Scoring Cliente     (UC-016)
+
+
+Total CE = 7
+
+
+[NOTA: El UC de Autenticación se interpreta como CE porque
+es una entrada que genera una respuesta en línea (token /
+sesión) sin modificar un ALI. Si la cátedra lo clasifica
+como EE, moverlo y ajustar los totales. Es un punto
+debatible.]
+
+
+
+
+-- ARCHIVOS LÓGICOS INTERNOS (ALI) --
+Tablas de la base de datos gestionadas por el sistema:
+
+
+  1. Usuario
+  2. Organización
+  3. Categoría
+  4. Producto / Precio / Alicuota / UnidadMedida
+     [NOTA: Agrupar como 1 ALI o separar en 4 según
+     criterio de granularidad que acuerde el grupo.
+     Por ahora se cuenta como 1 entidad lógica principal
+     más sus tablas de soporte = 2 ALI.]
+  5. Proveedor
+  6. Venta / Detalle de Venta
+  7. Solicitud de Crédito
+  8. Scoring Cliente
+  9. Factura / Nota de Crédito
+
+
+Total ALI = 9
+
+
+[NOTA: Este es el conteo más subjetivo. El criterio IFPUG
+dice que un ALI es un "agrupamiento lógico de datos", no
+necesariamente una tabla. Revisar con el diagrama de clases
+para afinar. El material de clase usa como ejemplo las
+tablas de BD directamente.]
+
+
+
+
+-- ARCHIVOS DE INTERFAZ EXTERNOS (AIE) --
+Sistemas externos con los que interactúa la aplicación
+(fuera de su frontera):
+
+
+  1. API de Scoring Crediticio externo (UC-016)
+  2. Sistema de Facturación Electrónica (AFIP / equivalente)
+
+
+Total AIE = 2
+
+
+[NOTA: Si el sistema tiene integración con algún otro
+servicio externo (pasarela de pagos, servicio de envío de
+mails, etc.) agregar los AIE correspondientes.]
+
+
+
+
+================================================================
+PASO 2 — CÁLCULO DE PUNTOS DE FUNCIÓN NO AJUSTADOS (PFNA)
+================================================================
+
+
+Se asigna complejidad MEDIA a todos los componentes
+(criterio adoptado igual al Ejercicio 1 de clase).
+
+
+[NOTA: Los pesos por complejidad están en la tabla IFPUG
+del material de clase. Para complejidad MEDIA los valores
+son: EE=4, SE=5, CE=4, ALI=10, AIE=7. Si el grupo decide
+cambiar algún componente a Simple o Complejo, ajustar el
+cálculo aquí.]
+
+
+Tabla de cálculo:
+
+
+  Componente | Cantidad | Peso (media) | Subtotal
+  -----------|----------|--------------|--------
+  EE         |    14    |      4       |   56
+  SE         |     5    |      5       |   25
+  CE         |     7    |      4       |   28
+  ALI        |     9    |     10       |   90
+  AIE        |     2    |      7       |   14
+  -----------|----------|--------------|--------
+  TOTAL PFNA |          |              |  213
+
+
+
+
+================================================================
+PASO 3 — FACTOR DE AJUSTE TÉCNICO (Fi)
+================================================================
+
+
+Se evalúan los 14 factores de ajuste según el material de
+clase, en escala 0 (no aplica) a 5 (esencial):
+
+
+[NOTA: Estos valores los asignamos nosotros según nuestro
+criterio del sistema. Son subjetivos. El material de clase
+los llama FAV (Factores de Ajuste de Valor). Revisar en
+grupo si algún puntaje no representa bien al sistema.]
+
+
+  N°  | Factor                        | Puntaje
+  ----|-------------------------------|--------
+  1   | Comunicación de datos         |   4
+       (el sistema intercambia datos con APIs externas)
+  2   | Procesamiento distribuido     |   3
+       (cliente-servidor, posiblemente cloud)
+  3   | Objetivos de rendimiento      |   2
+       (rendimiento estándar, no crítico)
+  4   | Configuración del equipamiento|   1
+       (no hay restricciones especiales de hardware)
+  5   | Tasa de transacciones         |   3
+       (ventas y facturación generan volumen moderado)
+  6   | Entrada de datos en línea     |   5
+       (todo el ingreso es en línea, no por lotes)
+  7   | Interfaz con el usuario       |   3
+       (múltiples pantallas, ABMs, reportes)
+  8   | Actualizaciones en línea      |   4
+       (los ALI se actualizan en tiempo real)
+  9   | Procesamiento complejo        |   3
+       (cálculo de impuestos, scoring crediticio)
+  10  | Reusabilidad del código       |   2
+       (algunos módulos reutilizables, no es el foco)
+  11  | Facilidad de implementación   |   1
+       (instalación estándar)
+  12  | Facilidad de operación        |   2
+       (interfaz amigable prevista)
+  13  | Instalaciones múltiples       |   2
+       (posible uso en varias organizaciones/sucursales)
+  14  | Facilidad de cambios          |   3
+       (sistema pensado para evolucionar)
+  ----|-------------------------------|--------
+       SUMATORIA Fi                   |   38
+
+
+Fórmula del factor de ajuste (según material de clase):
+  Factor de Ajuste = 0,65 + (0,01 × ΣFi)
+  Factor de Ajuste = 0,65 + (0,01 × 38)
+  Factor de Ajuste = 0,65 + 0,38
+  Factor de Ajuste = 1,03
+
+
+
+
+================================================================
+PASO 4 — PUNTOS DE FUNCIÓN AJUSTADOS (PFA)
+================================================================
+
+
+  PFA = PFNA × Factor de Ajuste
+  PFA = 213  × 1,03
+  PFA = 219,39 ≈ 220 PF
+
+
+
+
+================================================================
+PASO 5 — ESFUERZO (Horas/Persona)
+================================================================
+
+
+Según la tabla IFPUG del material de clase:
+  - Java (lenguaje de alto nivel): 8 hs/PF
+
+
+  Esfuerzo = PFA × hs/PF
+  Esfuerzo = 220 × 8
+  Esfuerzo = 1.760 horas/persona
+
+
+[NOTA: El sistema usa Java + SQL. La tabla IFPUG de clase
+asigna 8 hs/PF a lenguajes de alto nivel (Java, C#, Python,
+etc.) y 6 hs/PF a SQL. Como Java es el lenguaje principal
+de desarrollo, se usa 8 hs/PF. Podría argumentarse un
+promedio ponderado, pero para simplificar se adopta el
+criterio del ejercicio de clase (un solo valor).]
+
+
+
+
+================================================================
+PASO 6 — DURACIÓN Y EQUIPO DE DESARROLLO
+================================================================
+
+
+Base de cálculo:
+  - 8 horas laborales por día
+  - 20 días laborales por mes
+
+
+Duración según tamaño del equipo:
+
+
+  Equipo       | Horas totales | Días  | Meses
+  -------------|---------------|-------|-------
+  1 persona    |    1.760      | 220   | 11,0
+  2 personas   |    1.760      |  110  |  5,5
+  3 personas   |    1.760      |  73,3 |  3,7
+  4 personas   |    1.760      |  55   |  2,75
+  -------------|---------------|-------|-------
+
+
+Equipo recomendado: 3 personas
+
+
+Justificación: Un equipo de 3 personas en ~3,7 meses es
+razonable para la complejidad del sistema (facturación,
+créditos, scoring, reportes). Con menos de 3 personas la
+duración se extiende demasiado; con más de 4 el overhead
+de coordinación probablemente no valga la pena para un
+equipo nuevo.
+
+
+Roles y habilidades del equipo:
+
+
+  Rol                       | Habilidades requeridas
+  --------------------------|-------------------------------
+  Líder de Proyecto (1)     | Gestión de proyectos, análisis
+                            | de requerimientos, UML,
+                            | comunicación con el cliente
+  Analista Funcional (1)    | Modelado UML, diseño de BD,
+                            | documentación técnica, SQL
+  Desarrollador Full Stack  | Java (backend), SQL, diseño
+  / Backend (1)             | de APIs REST, testing básico
+
+
+
+
+================================================================
+PASO 7 — COSTO DEL PROYECTO
+================================================================
+
+
+Fuente de valores de referencia:
+  Honorarios Profesionales Recomendados — CPCIPC
+  (Consejo Profesional de Ciencias Informáticas de la
+  Provincia de Córdoba).
+  Publicados por COPROCIER. Actualización: marzo 2025.
+  URL: https://coprocier.org.ar/web/?page_id=53
+
+
+[NOTA: Estos son valores de referencia recomendados por
+el Consejo, NO son salarios mínimos obligatorios. Se usan
+como base académica justificada. En un proyecto real los
+valores varían según modalidad (relación de dependencia,
+freelance, empresa), experiencia y negociación. Actualizar
+a la fecha de entrega del TP si hubo actualizaciones
+significativas por inflación.]
+
+
+Remuneraciones mensuales de referencia (marzo 2025):
+
+
+  Rol                        | Remuneración mensual (ARS)
+  ---------------------------|---------------------------
+  Líder de Proyecto          | $ 2.143.428
+  Analista Funcional Senior  | $ 1.552.541
+  Desarrollador Full Stack   | $ 2.484.943
+  ---------------------------|---------------------------
+
+
+Cálculo de costo de RRHH (duración = 3,7 meses):
+
+
+  Rol                        |  Sueldo/mes   | Meses |  Total
+  ---------------------------|---------------|-------|----------
+  Líder de Proyecto          | $ 2.143.428   |  3,7  | $ 7.930.684
+  Analista Funcional Senior  | $ 1.552.541   |  3,7  | $ 5.744.402
+  Desarrollador Full Stack   | $ 2.484.943   |  3,7  | $ 9.194.289
+  ---------------------------|---------------|-------|----------
+  Subtotal RRHH              |               |       | $ 22.869.375
+
+
+Otros costos estimados (20% sobre RRHH):
+  Licencias, infraestructura, pruebas, contingencias:
+  $ 22.869.375 × 0,20 = $ 4.573.875
+
+
+[NOTA: El 20% es una estimación propia. No surge del
+material de clase. En los ejercicios de clase se dan
+"otros costos" como valor fijo. Si la cátedra pregunta,
+justificar como margen estándar para imprevistos y costos
+operativos. Alternativamente se puede proponer un valor
+fijo (ej. $5.000.000) al estilo del ejercicio 1 de clase.]
+
+
+  COSTO TOTAL ESTIMADO = $ 22.869.375 + $ 4.573.875
+  COSTO TOTAL ESTIMADO = $ 27.443.250 ARS
+
+
+
+
+================================================================
+PASO 8 — RESUMEN EJECUTIVO
+================================================================
+
+
+  Concepto                        | Valor
+  --------------------------------|---------------------------
+  Método de estimación            | Puntos de Función (IFPUG)
+  Lenguaje principal              | Java + SQL
+  Puntos de Función No Ajustados  | 213 PF
+  Factor de Ajuste                | 1,03  (ΣFi = 38)
+  Puntos de Función Ajustados     | 220 PF
+  Esfuerzo                        | 1.760 horas/persona
+  Equipo recomendado              | 3 profesionales
+  Duración estimada               | ~3,7 meses
+  Costo de RRHH                   | $ 22.869.375 ARS
+  Otros costos (20%)              | $  4.573.875 ARS
+  COSTO TOTAL ESTIMADO            | $ 27.443.250 ARS
+  --------------------------------|---------------------------
+
+
+Nota aclaratoria: Los valores monetarios corresponden a
+honorarios recomendados por el CPCIPC (Córdoba, marzo 2025)
+y están expresados en pesos argentinos. Están sujetos a
+actualización por variación del índice IPIM.
+
+
+
+
+================================================================
+PENDIENTES Y PUNTOS A VALIDAR CON EL GRUPO
+================================================================
+
+
+  [?] 1. Confirmar si UC-008 (Calcular Impuestos y Total)
+         cuenta como EE o solo como lógica interna.
+  [?] 2. Definir granularidad de ALI: ¿Producto es 1 ALI
+         o se separan Precio, Alicuota, UnidadMedida?
+  [?] 3. ¿Hay notificaciones automáticas en el sistema?
+         Si sí, agregarlas como SE.
+  [?] 4. ¿Se integra con pasarela de pagos u otro
+         servicio externo? Si sí, agregar como AIE.
+  [?] 5. Revisar puntajes del Factor de Ajuste (Fi) en
+         conjunto. Son subjetivos y conviene acordarlos.
+  [?] 6. Definir si se usa remuneración mensual o valor
+         hora para el cálculo de costos (el CPCIPC
+         publica ambos).
+  [?] 7. Actualizar valores de honorarios a la fecha de
+         entrega del TP (el CPCIPC actualiza por IPIM
+         periódicamente).
+
+
+================================================================
+FIN DEL DOCUMENTO — VERSIÓN BORRADOR
+================================================================
